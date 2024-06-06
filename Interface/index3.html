@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Mapbox Circle Layer with Meter Radius</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        // Your Mapbox access token
+        mapboxgl.accessToken = 'pk.eyJ1IjoibmF2aWRzYXZhcmliIiwiYSI6ImNsM2lmdm5vdDBwZm4zaW54ZXliazcxNWkifQ.24943EDJln8CfDPmHhY2Ow';
+      
+        // Initialize the map
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-77.032, 38.913], // Set to your initial center point
+            zoom: 14
+        });
+
+        // Sample data (convert your data into this format)
+        const geojsonData = {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [-77.032, 38.913]
+                    },
+                    properties: {
+                        accuracies: 10,
+                        depths: 1,
+                        events: 5
+                    }
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [-77.032, 38.913] // Same coordinates as the first point
+                    },
+                    properties: {
+                        accuracies: 20,
+                        depths: 2,
+                        events: 10
+                    }
+                },
+                // Add more points here
+            ]
+        };
+
+        map.on('load', () => {
+            // Add data source
+            map.addSource('points', {
+                type: 'geojson',
+                data: geojsonData
+            });
+
+            // Add circle layer
+            map.addLayer({
+                id: 'circles',
+                type: 'circle',
+                source: 'points',
+                paint: {
+                    'circle-radius': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'accuracies'],
+                        0, 100,
+                        100, 1
+                    ],
+                    'circle-pitch-scale': 'map',
+                    'circle-color': [
+                        'match',
+                        ['get', 'depths'],
+                        1, 'blue',
+                        2, 'green',
+                        3, 'yellow',
+                        4, 'red',
+                        /* other */ 'red'
+                    ],
+                    'circle-opacity': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'events'],
+                        1, 0.1,
+                        10, 1
+                    ],
+                    'circle-stroke-color': 'black',
+                    'circle-stroke-width': 1
+                }
+            });
+        });
+    </script>
+</body>
+</html>

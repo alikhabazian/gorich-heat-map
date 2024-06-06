@@ -44,29 +44,123 @@ for column_index in range(5):
 
 
 
-@app.route('/get_data', methods=['GET'])
-def simulated_data():
-   data=[]
-   for _ in range(random.randint(1,20)):
-      loc=random.choice(locations)
-      accuracy=random.random()
-      data.append(
-         {
-            "type": "Feature",
-            "geometry": {
-                    "type": "Point",
-                    "coordinates": [loc[0], loc[1]]
-            },
-            "properties": {
-                    "accuracy":accuracy,
-                    "radius":(1-accuracy)*30,
-            }
-        }
-      )
+@app.route('/get_data/<int:depth>', methods=['GET'])
+def simulated_data(depth):
+    data=[]
+    if depth==1:
+        accuracy=0
+        events=0
+        for i in range(25):
+            accuracy=accuracy+4
+            events=events+4
+            loc=locations[i]
+            data.append(
+                {
+                    "type": "Feature",
+                    "geometry": {
+                            "type": "Point",
+                            "coordinates": [loc[0], loc[1]]
+                    },
+                    "properties": {
+                            "accuracies":accuracy,
+                            "depths":depth,
+                            "events":events
+                    }
+                }
+            )
+    elif depth==2:
+        accuracy=100
+        events=100
+        for i in range(25):
+            accuracy=accuracy-4
+            events=events-4
+            loc=locations[i]
+            data.append(
+                {
+                    "type": "Feature",
+                    "geometry": {
+                            "type": "Point",
+                            "coordinates": [loc[0], loc[1]]
+                    },
+                    "properties": {
+                            "accuracies":accuracy,
+                            "depths":depth,
+                            "events":events
+                    }
+                }
+            )
+    elif depth==3:
+        accuracy=0
+        events=100
+        for i in range(25):
+            accuracy=accuracy+4
+            events=events-4
+            loc=locations[i]
+            data.append(
+                {
+                    "type": "Feature",
+                    "geometry": {
+                            "type": "Point",
+                            "coordinates": [loc[0], loc[1]]
+                    },
+                    "properties": {
+                            "accuracies":accuracy,
+                            "depths":depth,
+                            "events":events
+                    }
+                }
+            )
+    elif depth==4:
+        accuracy=75
+        events=0
+        for i in range(25):
+            accuracy=accuracy-3
+            events=events+4
+            loc=locations[i]
+            data.append(
+                {
+                    "type": "Feature",
+                    "geometry": {
+                            "type": "Point",
+                            "coordinates": [loc[0], loc[1]]
+                    },
+                    "properties": {
+                            "accuracies":accuracy,
+                            "depths":depth,
+                            "events":events
+                    }
+                }
+            )
       
+     
       
    
-   return jsonify(data)
+    return jsonify(data)
+
+
+@app.route('/get_data2', methods=['GET'])
+def simulated_data2():
+    data=[]
+    for i in range(random.randint(1,5)):
+        loc=random.choice(locations)
+        numb_event=random.randint(1,10)
+        data.append(
+        {
+        "type": "Feature",
+        "geometry": {
+                "type": "Point",
+                "coordinates": [loc[0], loc[1]]
+        },
+        "properties": {
+                "accuracies":[random.random() for i in range(numb_event)],
+                "depths":[random.randint(1,4) for i in range(numb_event)],
+                "events":[random.randint(1,100) for i in range(numb_event)]
+        }
+        })
+    return jsonify(data)
+
+
+
 
 if __name__ == '__main__':
    app.run(port=9090)

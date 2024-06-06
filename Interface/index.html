@@ -34,6 +34,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
             display: flex;
+            /* display: None; */
             justify-content: center;
             align-items: center;
         }
@@ -65,6 +66,42 @@
         #login-form button:hover {
             background: #0056b3;
         }
+
+
+        #log_in {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 30%;
+            height: 15%;
+            /* top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%; */
+            background: rgba(59, 59, 59, 0.95);
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #full-width-table {
+            width: 100%;
+            border-collapse: collapse; /* Ensures there's no space between table cells */
+        }
+        #full-width-table td, #full-width-table th {
+            /* border: 1px solid #000; */
+            padding: 10px;
+            text-align: center;
+        }
+        #nested-table {
+            width: 100%;
+            border-collapse: collapse; /* Ensures there's no space between nested table cells */
+        }
+        #nested-table td, #nested-table th {
+            /* border: 1px solid #000; */
+            padding: 5px;
+            text-align: center;
+        }
   </style>
 </head>
 
@@ -78,6 +115,33 @@
         <input type="password" id="password" placeholder="Password" required />
         <button id="enter" onclick="login()">Login</button>
     </div>
+  </div>
+  <div id="log_in">
+    <table id="full-width-table">
+      <tr>
+          <td>
+              <table id="nested-table">
+                  <tr>
+                      <td>تاریخ</td>
+                  </tr>
+                  <tr>
+                      <td>زمان</td>
+                  </tr>
+              </table>
+          </td>
+          <td>
+              <table id="nested-table">
+                  <tr>
+                      <td>ادمین</td>
+                  </tr>
+                  <tr>
+                      <td>اسم ادمین</td>
+                  </tr>
+              </table>
+          </td>
+          <td>خوش آمدید</td>
+      </tr>
+  </table>
   </div>
 
   <script>
@@ -150,7 +214,7 @@
             },
             center: [51.385785,35.687527], // starting position [lng, lat]
             zoom: 18, // starting zoom
-            interactive:false
+            interactive:true
         });
     map.setMaxZoom(22);
 
@@ -158,79 +222,540 @@
 
 
     map.on('load', () => {
+
+      const geojsonData1 = {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.385785,35.687527]
+                    },
+                    properties: {
+                        accuracies: 20,
+                        depths: 1,
+                        events: 20
+                    }
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.385885,35.687527] // Same coordinates as the first point
+                    },
+                    properties: {
+                        accuracies: 40,
+                        depths: 1,
+                        events: 40
+                    }
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.385985,35.687527] // Same coordinates as the first point
+                    },
+                    properties: {
+                        accuracies: 70,
+                        depths: 1,
+                        events: 70
+                    }
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.386085,35.687527] // Same coordinates as the first point
+                    },
+                    properties: {
+                        accuracies: 90,
+                        depths: 1,
+                        events: 90
+                    }
+                },
+            ]
+        };
+
+
+      const geojsonData2 = {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.385785,35.687527]
+                    },
+                    properties: {
+                        accuracies: 90,
+                        depths: 1,
+                        events: 20
+                    }
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.385885,35.687527] // Same coordinates as the first point
+                    },
+                    properties: {
+                        accuracies: 70,
+                        depths: 1,
+                        events: 40
+                    }
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.385985,35.687527] // Same coordinates as the first point
+                    },
+                    properties: {
+                        accuracies: 40,
+                        depths: 1,
+                        events: 70
+                    }
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.386085,35.687527] // Same coordinates as the first point
+                    },
+                    properties: {
+                        accuracies: 20,
+                        depths: 1,
+                        events: 90
+                    }
+                },
+            ]
+        };
+
       
-      map.addSource('event', {
+      const geojsonData3 = {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.385785,35.687527]
+                    },
+                    properties: {
+                        accuracies: 90,
+                        depths: 3,
+                        events: 20
+                    }
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [51.385885,35.687527] // Same coordinates as the first point
+                    },
+                    properties: {
+                        accuracies: 70,
+                        depths: 3,
+                        events: 20
+                    }
+                },
+                // Add more points here
+            ]
+        };
+    
+      const geojsonData4 = {
+          type: 'FeatureCollection',
+          features: [
+              {
+                  type: 'Feature',
+                  geometry: {
+                      type: 'Point',
+                      coordinates: [51.385785,35.687527]
+                  },
+                  properties: {
+                      accuracies: 90,
+                      depths: 4,
+                      events: 20
+                  }
+              },
+              {
+                  type: 'Feature',
+                  geometry: {
+                      type: 'Point',
+                      coordinates: [51.385885,35.687527] // Same coordinates as the first point
+                  },
+                  properties: {
+                      accuracies: 70,
+                      depths: 4,
+                      events: 20
+                  }
+              },
+              // Add more points here
+          ]
+      };
+  
+      map.addSource('event1', {
             'type': 'geojson',
-            'data': ''
+            'data': geojsonData1
         });
+      map.addSource('event2', {
+          'type': 'geojson',
+          'data': geojsonData2
+      });
+      map.addSource('event3', {
+          'type': 'geojson',
+          'data': geojsonData3
+      });
+      map.addSource('event4', {
+          'type': 'geojson',
+          'data': geojsonData4
+      });
 
       map.addLayer(
             {
-                'id': 'earthquakes-heat',
+                'id': 'earthquakes-heat1',
                 'type': 'heatmap',
-                'source': 'event',
+                'source': 'event1',
                 'maxzoom': 22,
                 'paint': {
                     // Increase the heatmap weight based on frequency and property magnitude
-                    'heatmap-weight': 1,
+                    'heatmap-weight': [
+                      'interpolate',
+                      ['linear'],
+                      ['get','events'],
+                      0,
+                      0,
+                      100,
+                      1
+                    ],
                     // 'heatmap-weight': 1,
                     // Increase the heatmap color weight weight by zoom level
                     // heatmap-intensity is a multiplier on top of heatmap-weight
-                    'heatmap-intensity': [
-                        'interpolate',
-                        ['linear'],
-                        ['zoom'],
-                        0,
-                        1,
-                        22,
-                        3
-                    ],
+                    // 'heatmap-intensity': [
+                    //     'interpolate',
+                    //     ['linear'],
+                    //     ['zoom'],
+                    //     0,
+                    //     1,
+                    //     22,
+                    //     3
+                    // ],
+                    'heatmap-intensity': 1,
                     
     
                     
                     // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
                     // Begin color ramp at 0-stop with a 0-transparancy color
                     // to create a blur-like effect.
+                    // 'heatmap-color': [
+                    //     'interpolate',
+                    //     ['linear'],
+                    //     ['heatmap-density'],
+                    //     0,
+                    //     'rgba(33,102,172,0)',
+                    //     0.2,
+                    //     'rgb(103,169,207)',
+                    //     0.4,
+                    //     'rgb(209,229,240)',
+                    //     0.6,
+                    //     'rgb(253,219,199)',
+                    //     0.8,
+                    //     'rgb(239,138,98)',
+                    //     1,
+                    //     'rgb(178,24,43)'
+                    // ],
                     'heatmap-color': [
                         'interpolate',
                         ['linear'],
                         ['heatmap-density'],
                         0,
-                        'rgba(33,102,172,0)',
-                        0.2,
-                        'rgb(103,169,207)',
-                        0.4,
-                        'rgb(209,229,240)',
-                        0.6,
-                        'rgb(253,219,199)',
-                        0.8,
-                        'rgb(239,138,98)',
-                        1,
-                        'rgb(178,24,43)'
+                        'rgba(178,24,43,0)',
+                        0.05,
+                        'rgba(178,24,43,0.3)',
+                        0.5,
+                        'rgba(178,24,43,1)'
                     ],
                     // 'heatmap-color': 'rgb(0,0,200)',
                     // Adjust the heatmap radius by zoom level
-                  //   'heatmap-radius': [
-                  //     'interpolate',
-                  //     ['linear'],
-                  //     ['zoom'],
-                  //     14,
-                  //     ['get', 'radius'],
-                  //     21,
-                  //     ['*',['get', 'radius'],2]
-                  // ],
-                  'heatmap-radius':['get', 'radius'],
+                    'heatmap-radius': [
+                      'interpolate',
+                      ['linear'],
+                      ['get','accuracies'],
+                      0,
+                      100,
+                      100,
+                      20
+                    ],
+                  // 'heatmap-radius':20,
+                  // 'heatmap-radius':['get', 'radius'], 
                   
                     // Transition from heatmap to circle layer by zoom level
-                    'heatmap-opacity': 0.6,
+                  'heatmap-opacity': 0.8,
                     // 'heatmap-opacity': 1
                 }
             },
             
         );
 
+      map.addLayer(
+          {
+              'id': 'earthquakes-heat2',
+              'type': 'heatmap',
+              'source': 'event2',
+              'maxzoom': 22,
+              'paint': {
+                  // Increase the heatmap weight based on frequency and property magnitude
+                  'heatmap-weight': [
+                    'interpolate',
+                    ['linear'],
+                    ['get','events'],
+                    0,
+                    0,
+                    100,
+                    1
+                  ],
+                  // 'heatmap-weight': 1,
+                  // Increase the heatmap color weight weight by zoom level
+                  // heatmap-intensity is a multiplier on top of heatmap-weight
+                  // 'heatmap-intensity': [
+                  //     'interpolate',
+                  //     ['linear'],
+                  //     ['zoom'],
+                  //     0,
+                  //     1,
+                  //     22,
+                  //     3
+                  // ],
+                  'heatmap-intensity': 1,
+                  
+  
+                  
+                  // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                  // Begin color ramp at 0-stop with a 0-transparancy color
+                  // to create a blur-like effect.
+                  // 'heatmap-color': [
+                  //     'interpolate',
+                  //     ['linear'],
+                  //     ['heatmap-density'],
+                  //     0,
+                  //     'rgba(33,102,172,0)',
+                  //     0.2,
+                  //     'rgb(103,169,207)',
+                  //     0.4,
+                  //     'rgb(209,229,240)',
+                  //     0.6,
+                  //     'rgb(253,219,199)',
+                  //     0.8,
+                  //     'rgb(239,138,98)',
+                  //     1,
+                  //     'rgb(178,24,43)'
+                  // ],
+                  'heatmap-color': [
+                      'interpolate',
+                      ['linear'],
+                      ['heatmap-density'],
+                      0,
+                      'rgba(255, 153, 0,0)',
+                      0.05,
+                      'rgba(255, 153, 0,0.3)',
+                      0.5,
+                      'rgba(255, 153, 0,1)'
+                  ],
+                  // 'heatmap-color': 'rgb(0,0,200)',
+                  // Adjust the heatmap radius by zoom level
+                  'heatmap-radius': [
+                    'interpolate',
+                    ['linear'],
+                    ['get','accuracies'],
+                    0,
+                    100,
+                    100,
+                    20
+                  ],
+                // 'heatmap-radius':20,
+                // 'heatmap-radius':['get', 'radius'], 
+                
+                  // Transition from heatmap to circle layer by zoom level
+                'heatmap-opacity': 0.8,
+                  // 'heatmap-opacity': 1
+              }
+          },
+          
+      );
 
-      
+      map.addLayer(
+            {
+                'id': 'earthquakes-heat3',
+                'type': 'heatmap',
+                'source': 'event3',
+                'maxzoom': 22,
+                'paint': {
+                    // Increase the heatmap weight based on frequency and property magnitude
+                    'heatmap-weight': [
+                      'interpolate',
+                      ['linear'],
+                      ['get','events'],
+                      0,
+                      0,
+                      100,
+                      1
+                    ],
+                    // 'heatmap-weight': 1,
+                    // Increase the heatmap color weight weight by zoom level
+                    // heatmap-intensity is a multiplier on top of heatmap-weight
+                    // 'heatmap-intensity': [
+                    //     'interpolate',
+                    //     ['linear'],
+                    //     ['zoom'],
+                    //     0,
+                    //     1,
+                    //     22,
+                    //     3
+                    // ],
+                    'heatmap-intensity': 0.8,
+                    
+    
+                    
+                    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                    // Begin color ramp at 0-stop with a 0-transparancy color
+                    // to create a blur-like effect.
+                    // 'heatmap-color': [
+                    //     'interpolate',
+                    //     ['linear'],
+                    //     ['heatmap-density'],
+                    //     0,
+                    //     'rgba(33,102,172,0)',
+                    //     0.2,
+                    //     'rgb(103,169,207)',
+                    //     0.4,
+                    //     'rgb(209,229,240)',
+                    //     0.6,
+                    //     'rgb(253,219,199)',
+                    //     0.8,
+                    //     'rgb(239,138,98)',
+                    //     1,
+                    //     'rgb(178,24,43)'
+                    // ],
+                    'heatmap-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['heatmap-density'],
+                        0,
+                        'rgba(255, 255, 102,0)',
+                        0.05,
+                        'rgba(255, 255, 102,0.3)',
+                        0.5,
+                        'rgba(255, 255, 102,1)'
+                    ],
+                    // 'heatmap-color': 'rgb(0,0,200)',
+                    // Adjust the heatmap radius by zoom level
+                    'heatmap-radius': [
+                      'interpolate',
+                      ['linear'],
+                      ['get','accuracies'],
+                      0,
+                      100,
+                      100,
+                      20
+                    ],
+                  // 'heatmap-radius':20,
+                  // 'heatmap-radius':['get', 'radius'], 
+                  
+                    // Transition from heatmap to circle layer by zoom level
+                  'heatmap-opacity': 0.8,
+                    // 'heatmap-opacity': 1
+                }
+            },
+            
+        );
+
+        map.addLayer(
+            {
+                'id': 'earthquakes-heat4',
+                'type': 'heatmap',
+                'source': 'event4',
+                'maxzoom': 22,
+                'paint': {
+                    // Increase the heatmap weight based on frequency and property magnitude
+                    'heatmap-weight': [
+                      'interpolate',
+                      ['linear'],
+                      ['get','events'],
+                      0,
+                      0,
+                      100,
+                      1
+                    ],
+                    // 'heatmap-weight': 1,
+                    // Increase the heatmap color weight weight by zoom level
+                    // heatmap-intensity is a multiplier on top of heatmap-weight
+                    // 'heatmap-intensity': [
+                    //     'interpolate',
+                    //     ['linear'],
+                    //     ['zoom'],
+                    //     0,
+                    //     1,
+                    //     22,
+                    //     3
+                    // ],
+                    'heatmap-intensity': 1,
+                    
+    
+                    
+                    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                    // Begin color ramp at 0-stop with a 0-transparancy color
+                    // to create a blur-like effect.
+                    // 'heatmap-color': [
+                    //     'interpolate',
+                    //     ['linear'],
+                    //     ['heatmap-density'],
+                    //     0,
+                    //     'rgba(33,102,172,0)',
+                    //     0.2,
+                    //     'rgb(103,169,207)',
+                    //     0.4,
+                    //     'rgb(209,229,240)',
+                    //     0.6,
+                    //     'rgb(253,219,199)',
+                    //     0.8,
+                    //     'rgb(239,138,98)',
+                    //     1,
+                    //     'rgb(178,24,43)'
+                    // ],
+                    'heatmap-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['heatmap-density'],
+                        0,
+                        'rgba(153, 255, 51,0)',
+                        0.05,
+                        'rgba(153, 255, 51,0.3)',
+                        0.5,
+                        'rgba(153, 255, 51,1)'
+                    ],
+                    // 'heatmap-color': 'rgb(0,0,200)',
+                    // Adjust the heatmap radius by zoom level
+                    'heatmap-radius': [
+                      'interpolate',
+                      ['linear'],
+                      ['get','accuracies'],
+                      0,
+                      100,
+                      100,
+                      20
+                    ],
+                  // 'heatmap-radius':20,
+                  // 'heatmap-radius':['get', 'radius'], 
+                  
+                    // Transition from heatmap to circle layer by zoom level
+                  'heatmap-opacity': 0.8,
+                    // 'heatmap-opacity': 1
+                }
+            },
+            
+        );
+
 
         
 
@@ -258,7 +783,7 @@
       
     });
 
-    function updateSourceData() {
+    function updateSourceData(i) {
       const requestOptions = {
         method: "GET",
         headers: {
@@ -266,15 +791,21 @@
         },
       };
       
-      fetch('http://localhost:8585/get_data',requestOptions)
+        
+        fetch(`http://localhost:8585/get_data/${i}`,requestOptions)
           .then(response => response.json())
           .then(data => {
-              map.getSource('event').setData(data);
+              console.log(`event${i}`)
+              console.log(data)
+              map.getSource(`event${i}`).setData(data);
           })
           .catch(error => {
               console.error('Error fetching new data:', error);
           });
       }
+
+      
+      
 
     function get_state(){
       console.log("get_state")
@@ -314,7 +845,10 @@
         map.keyboard.enable();
         map.scrollZoom.enable();
         map.touchZoomRotate.enable();
-        nIntervId =setInterval(updateSourceData, 2000);
+        nIntervId1 =setInterval(updateSourceData, 2000,1);
+        nIntervId2 =setInterval(updateSourceData, 2000,2);
+        nIntervId3 =setInterval(updateSourceData, 2000,3);
+        nIntervId4 =setInterval(updateSourceData, 2000,4);
         map.addControl(new mapboxgl.NavigationControl());
       }
       else{

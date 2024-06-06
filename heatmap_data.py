@@ -73,14 +73,14 @@ def token_required(f):
     return decorated
 
 
-@app.route('/get_data', methods=['GET'])
+@app.route('/get_data/<int:depth>', methods=['GET'])
 @token_required
-def get_new_data():
+def get_new_data(depth):
     heatmap_data = {
     "type": "FeatureCollection",
     "features": []
     }
-    data_url = "http://localhost:9090/get_data"
+    data_url = f"http://localhost:9090/get_data/{depth}"
     try:
         response = requests.get(data_url)
         response.raise_for_status()
