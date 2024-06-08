@@ -18,6 +18,7 @@
     body {
       margin: 0;
       padding: 0;
+      /* position: relative; */
     }
 
     #map {
@@ -102,6 +103,112 @@
             padding: 5px;
             text-align: center;
         }
+
+      .box {
+          position: absolute;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 90%;
+          background-color: rgba(255, 255, 255, 0.2);
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          padding: 20px;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+          z-index: 2; 
+      }
+
+      
+
+        .slider-container {
+            text-align: center;
+            position: relative;
+
+        }
+        .slider {
+            width: 100%;
+        }
+        .slider-value {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        .apply_btn{
+            position: relative;
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .apply_btn:hover {
+            background: #0056b3;
+        }
+        .tooltip-container {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .tooltip {
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px ;
+            border-radius: 5px;
+            pointer-events: none; /* Ensures the tooltip doesn't interfere with slider interaction */
+            opacity: 1; /* Initially hide the tooltip */
+            transition: opacity 0.3s ease;
+        }
+        .additional-feature {
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 5px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .ruler {
+          
+              position: absolute;
+              top: 5px;
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              pointer-events: none;  /* Ensure the ruler doesn't interfere with slider interaction */
+          }
+
+          .tick {
+              position: absolute;
+              height: 10px;
+              border-left: 1px solid black;
+          }
+
+          .tick span {
+              position: absolute;
+              top: 15px;
+              transform: translateX(-50%);
+              font-size: 10px;
+          }
+
+          .slider-wrapper {
+              position: relative;
+              width: 100%;
+              margin-bottom : 20px;
+              margin-top : 30px;
+          }
+
+        
+
+
   </style>
 </head>
 
@@ -143,8 +250,93 @@
       </tr>
   </table>
   </div>
+  
+  
+  <div class="box">
+    <!-- <h2>Review</h2> -->
+    <div class="slider-container">
+          <div class="tooltip-container">
+            <!-- <div class="additional-feature">Feature 1</div> -->
+            <div class="tooltip" id="sliderTooltip">00:00:00-00:00:00
+            </div>
+            
+            <!-- <div class="additional-feature">Feature 2</div> -->
+        </div>
+        <div class="slider-wrapper">
+          <input type="range" min="0" max="86399" value="0" class="slider" id="mySlider">
+          <div class="ruler" id="sliderRuler"></div>
+        </div>
+        <button class="apply_btn" onclick="apply()">Apply</button>
+    </div>
+    
+  </div>
 
   <script>
+
+  const slider = document.getElementById('mySlider');
+  const tooltip = document.getElementById('sliderTooltip');
+  const ruler = document.getElementById('sliderRuler');
+
+
+  slider.addEventListener('input', function() {
+    const seconds = parseInt(this.value);
+    const hours = Math.floor(seconds / 3600) % 24;
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    const formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(secs)}`;
+    
+    const hoursbefore = Math.max(0,hours-2)
+    const formattedTimebefore = `${padZero(hoursbefore)}:${padZero(minutes)}:${padZero(secs)}`;
+
+    tooltip.textContent = formattedTimebefore+'-'+formattedTime;
+
+
+});
+
+      function padZero(num) {
+          return (num < 10 ? '0' : '') + num;
+      }
+
+
+      function createRuler() {
+    // Clear the existing ruler
+    while (ruler.firstChild) {
+        ruler.removeChild(ruler.firstChild);
+    }
+    
+    const rulerWidth = ruler.offsetWidth-15;
+    const tickInterval = rulerWidth / 24;  // Dividing by 24 to create 24 evenly spaced ticks
+
+    for (let i = 0; i <= 24; i++) {
+        const tick = document.createElement('div');
+        tick.classList.add('tick');
+        tick.style.left = `${(i * tickInterval) - 1+10}px`;  // Adjusting for positioning
+
+        const label = document.createElement('span');
+        label.textContent = `${padZero(i)}:00`;
+        tick.appendChild(label);
+        ruler.appendChild(tick);
+    }
+}
+
+// Create the ruler initially
+createRuler();
+
+// Recreate the ruler on window resize
+window.addEventListener('resize', createRuler);
+
+
+function apply(){
+  
+}
+
+  
+
+
+
+
+    
+
     mapboxgl.accessToken = 'pk.eyJ1IjoibmF2aWRzYXZhcmliIiwiYSI6ImNsM2lmdm5vdDBwZm4zaW54ZXliazcxNWkifQ.24943EDJln8CfDPmHhY2Ow';
     mapboxgl.setRTLTextPlugin(
       'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
